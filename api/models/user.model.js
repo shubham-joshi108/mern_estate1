@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    avtar:{
+       type: String,
+       default: "C:\Users\SHUBHAM JOSHI\OneDrive\Desktop\profileimage.png"
+
     }
 }, {timestamps: true})
 
