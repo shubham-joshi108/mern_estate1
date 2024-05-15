@@ -15,6 +15,30 @@ import {
   FaShare,
 } from 'react-icons/fa';
 import Contact from '../components/Contact';
+import PaymentAPP from '../components/Payment';
+
+
+var options = {
+  "key": "rzp_test_K2VirKmHNjauNH", // Enter the Key ID generated from the Dashboard
+  "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  "currency": "INR",
+  "name": "Acme Corp", //your business name
+  "description": "Test Transaction",
+  "image": "https://example.com/your_logo",
+  "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+  "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+  "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+      "name": "Gaurav Kumar", //your customer's name
+      "email": "gaurav.kumar@example.com",
+      "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+  },
+  "notes": {
+      "address": "Razorpay Corporate Office"
+  },
+  "theme": {
+      "color": "#3399cc"
+  }
+};
 
 // https://sabe.io/blog/javascript-format-numbers-commas#:~:text=The%20best%20way%20to%20format,format%20the%20number%20with%20commas.
 
@@ -49,6 +73,12 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
+
+  const showPaymentScreen = (e) => {
+    var rzp1 = new Razorpay(options);
+    e.preventDefault();
+    rzp1.open();
+  }
 
   return (
     <main>
@@ -106,7 +136,7 @@ export default function Listing() {
               </p>
               {listing.offer && (
                 <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
-                 &#8377; {+listing.regularPrice - +listing.discountPrice} OFF
+                  &#8377; {+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
               )}
             </div>
@@ -136,6 +166,7 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+
             {currentUser && listing.userRef !== currentUser._id && !contact && (
               <button
                 onClick={() => setContact(true)}
@@ -144,6 +175,15 @@ export default function Listing() {
                 Contact landlord
               </button>
             )}
+
+            {/* <button
+              onClick={showPaymentScreen}
+              className='bg-green-800 text-white rounded-lg uppercase hover:opacity-95 p-3 w-full'
+            >
+              Payment
+            </button> */}
+            <PaymentAPP/>
+
             {contact && <Contact listing={listing} />}
           </div>
         </div>
